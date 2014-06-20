@@ -11,49 +11,31 @@ function create() {
 
 	player = game.add.sprite(200,428,'ship');
 	game.physics.arcade.enable(player);
+	player.body.collideWorldBounds = true;
 }
 
 function update() {
 
 player.body.velocity.x = 0;
 
-if(cursors.left.isDown) {
-		turnLeft();
-		}
-	else if(cursors.right.isDown) {
-		turnRight();	
-	else
-	{
-		player.body.velocity.x = 0;
-		} 
+if (cursors.left.isDown) {
+	checkAngle(player, -10);
+	player.body.velocity.x = -350;		
+	}
+else if (cursors.right.isDown) {
+	checkAngle(player, 10);
+	player.body.velocity.x = 350;
+	}	
+else {
+	checkAngle(player, 0);
+	player.body.velocity.x = 0;
+	} 
 }
-//Turning functions are breaking my game
-function turnLeft() {
-		if(player.alive==false) return;
-        player.body.velocity.x = -350;
-		
-		var leftTurn = game.add.tween(player);
-		leftTurn.to({angle: -20}, 100);
-		
-		leftTurn.start();
-    }
 
-function turnRight() {
-		if(player.alive==false) return;
-        player.body.velocity.x = 350;
-		
-		var rightTurn = game.add.tween(player);
-		rightTurn.to({angle: 20}, 100);
-		
-		rightTurn.start();
-    }
-
-function straighten() {
-		if(player.alive==false) return;
-        player.body.velocity.x = 0;
-		
-		var stable = game.add.tween(player);
-		stable.to({angle: 0}, 100);
-		
-		stable.start();
+/*This function checks the angle of an object and adjusts it
+negatively or positively to match the desired numeric value*/
+function checkAngle(thing,toAngle) {
+		if(thing.angle > toAngle) thing.angle -= 2;
+		else if (thing.angle < toAngle) thing.angle += 2;
+		else return;
     }        
