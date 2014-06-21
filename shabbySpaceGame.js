@@ -14,9 +14,9 @@ function create() {
 	player.body.collideWorldBounds = true;
 
 	obstacles = game.add.group();
-    obstacles.createMultiple(20, 'obstacle');
+    obstacles.createMultiple(30, 'obstacle');
     game.physics.arcade.enable(obstacles);
-    generate = game.time.events.loop(1500, addObstacles, game);
+    generate = game.time.events.loop(1000, addObstacles, game);
 }
 
 function update() {
@@ -48,14 +48,14 @@ function checkAngle(thing,toAngle) {
 function generateObstacle(hor, vert) {
     var newObstacle = obstacles.getFirstDead();
     newObstacle.reset(hor, vert);
-    newObstacle.body.velocity.y = 200; 
+    newObstacle.body.velocity.y = 200;
+    newObstacle.checkWorldBounds = true; 
     newObstacle.outOfBoundsKill = true;
 }
 
 function addObstacles() {
-    // var hole = Math.floor(Math.random()*5)+1;
+    var hole = Math.floor(Math.random()*4)+1;
     
-    // for (var i = 0; i < 6; i++)
-    //     if (i != hole && i != hole +1) generateObstacle(i*60+10,-400);
-    generateObstacle(50,50);
+    for (var i = 0; i < 6; i++)
+        if (i != hole && i != hole +1) generateObstacle(i*60+10,-200);
 }            
