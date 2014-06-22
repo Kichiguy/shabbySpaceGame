@@ -7,6 +7,7 @@ function preload() {
 }
 
 function create() {
+	game.state.add('main', game);
 	cursors = game.input.keyboard.createCursorKeys();
 
 	player = game.add.sprite(200,428,'ship');
@@ -35,6 +36,9 @@ else {
 	checkAngle(player, 0);
 	player.body.velocity.x = 0;
 	} 
+
+game.physics.arcade.overlap(player, obstacles, playerDeath, null, game);
+
 }
 
 /*This function checks the angle of an object and adjusts it
@@ -45,6 +49,9 @@ function checkAngle(thing,toAngle) {
 		else return;
     }
 
+/*The following two function generate the obstacles that the user needs to
+navigate through. They are heavily based on the Flappy Bird tutorial by
+lessmilk. His blog can be found at lessmilk.com*/
 function generateObstacle(hor, vert) {
     var newObstacle = obstacles.getFirstDead();
     newObstacle.reset(hor, vert);
@@ -58,4 +65,14 @@ function addObstacles() {
     
     for (var i = 0; i < 6; i++)
         if (i != hole && i != hole +1) generateObstacle(i*60+10,-200);
-}            
+}
+
+//This simply stops onscreen elements and retarts the game on death.
+function playerDeath() {
+		if (player.alive == false) return;
+		player.alive = false;
+		game.time.events.remove(generate);
+		obstacles.forEachAlive(function(p){p.body.velocity.y=0;},game);
+		setTimeout(function(){game.state.restart()}, 1000);
+		}
+		            
