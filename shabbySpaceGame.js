@@ -1,5 +1,8 @@
 var game = new Phaser.Game(450, 550, Phaser.AUTO, 'game_div', {preload: preload, create: create, update: update});
 
+var scoreText;
+var score;
+
 function preload() {
 	game.stage.backgroundColor = '#000000';
 	game.load.image('ship','assets/ship.png');
@@ -18,6 +21,11 @@ function create() {
     obstacles.createMultiple(30, 'obstacle');
     game.physics.arcade.enable(obstacles);
     generate = game.time.events.loop(1000, addObstacles, game);
+
+    score = 0;
+    var style = { font: "30px Arial", fill: "#ffffff", /*textAlign: "center"*/};
+    scoreText = game.add.text(20, 20, "0", style);		
+
 }
 
 function update() {
@@ -64,7 +72,11 @@ function addObstacles() {
     var hole = Math.floor(Math.random()*4)+1;
     
     for (var i = 0; i < 6; i++)
-        if (i != hole && i != hole +1) generateObstacle(i*60+10,-200);
+        if (i != hole && i != hole +1) generateObstacle(i*60+10,-50);
+
+    score += 10;
+    scoreText.setText(score);  
+
 }
 
 //This simply stops onscreen elements and retarts the game on death.
